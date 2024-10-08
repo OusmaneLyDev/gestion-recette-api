@@ -118,11 +118,11 @@ POST http://localhost:3000/api/categories
 - Clonez le dépôt sur votre machine locale :
 
 ```
-https://github.com/OusmaneLyDev/gestion_api_recettes.git
+https://github.com/OusmaneLyDev/gestion-recette-api.git
 ```
 
 ```
-cd gestion-api_recette
+cd gestion-recette-api
 ```
 
 - Installer les dépendances
