@@ -1,23 +1,41 @@
-import { check, param, validationResult } from "express-validator";
-import { StatusCodes } from "http-status-codes";
-import RecetteService from "../models/RecetteModel.js";
+import { check, param, validationResult } from 'express-validator';
+import { StatusCodes } from 'http-status-codes';
+import RecetteService from '../models/RecetteModel.js';
 
 const addRequestValidator = [
-  check("titre")
+  check('titre')
     .not()
     .isEmpty()
-    .withMessage("Titre ne peut pas être vide!")
+    .withMessage('Titre ne peut pas être vide!')
     .bail()
-    .isLength({ min: 6 })
-    .withMessage("Minimum 6 caractères requis!")
+    .isLength({ min: 5, max: 100 })
+    .withMessage('Le titre doit comporter entre 5 et 100 caractères!')
     .bail()
     .custom(async (value, { req }) => {
       const result = await RecetteService.checkRecipe(value);
       if (result !== 0) {
-        throw new Error("Cette recette existe déjà!");
+        throw new Error('Cette recette existe déjà!');
       }
       return true;
     }),
+
+      // Validation du champ 'ingredients'
+  check('ingredient')
+  .not()
+  .isEmpty()
+  .withMessage('Les ingrédients ne peuvent pas être vides!')
+  .bail()
+  .isLength({ min: 10, max: 500 })
+  .withMessage('Les ingrédients doivent comporter entre 10 et 500 caractères!'),
+
+// Validation du champ 'type'
+check('type')
+  .not()
+  .isEmpty()
+  .withMessage('Le type de recette est obligatoire!')
+  .bail()
+  .isIn(['entrée', 'plat', 'dessert'])
+  .withMessage("Le type de recette doit être l'une des valeurs suivantes : entrée, plat, dessert."),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
@@ -29,10 +47,10 @@ const addRequestValidator = [
 ];
 
 const deleteRequestValidator = [
-  param("id")
+  param('id')
     .not()
     .isEmpty()
-    .withMessage("Id est obligatoire!")
+    .withMessage('Id est obligatoire!')
     .bail()
     .custom(async (value, { req }) => {
       const result = await RecetteService.getRecetteById(value);
@@ -50,5 +68,12 @@ const deleteRequestValidator = [
     next();
   },
 ];
+
+function validerCategorie(nom) {
+  if (nom.length > 100) {
+      throw new Error("Le nom de la catégorie ne doit pas dépasser 100 caractères.");
+  }
+}
+
 
 export { addRequestValidator, deleteRequestValidator };
