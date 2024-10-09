@@ -57,7 +57,7 @@ CREATE TABLE `recettes` (
   `id_categorie` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_categorie_id` (`id_categorie`),
-  CONSTRAINT `fk_categorie_id` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id`)
+  CONSTRAINT `fk_categorie_id` FOREIGN KEY (`id_categorie`) REFERENCES `categories` (`id`) ON DELETE RETRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
